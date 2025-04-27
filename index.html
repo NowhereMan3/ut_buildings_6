@@ -13,31 +13,41 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">  
   <script src="https://cdn.jsdelivr.net/npm/leaflet.awesome-markers@2.0.5/dist/leaflet.awesome-markers.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.awesome-markers@2.0.5/dist/leaflet.awesome-markers.min.css">  
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    html, body { height: 100%; margin: 0; }
-	#map {
-	  flex: 1;
-	  height: 60vh;
-	}
-    .leaflet-container {
-	  display: flex;
-	  flex-direction: column; /* Mobile: stack vertically */
+	html, body {
 	  height: 100%;
+	  margin: 0;
+	  font-family: 'Inter', sans-serif;
+	}
+
+	/* Make map full width on mobile, center it on larger screens */
+	.leaflet-container {
+	  width: 100%;
+	  height: 60vh; /* 60% of viewport height */
+	  margin: 0 auto;
 	  max-width: 1200px;
-	  margin: 0 auto;}
-    .controls {
-	  background: #F0FFF0;
+	}
+	.controls {
+	  position: absolute;
+	  top: 10px;
+	  left: 10px;
+	  background: #F0fff0;
 	  padding: 10px;
 	  border-radius: 5px;
 	  box-shadow: 0px 0px 5px gray;
 	  z-index: 1000;
-    }
+	  max-width: 90%;
+	  width: 300px;
+	}
     .parent-header {
-      font-weight: bold;
+	   font-weight: bold;
       cursor: pointer;
       padding: 5px;
-      background: #007bff;
+      background: #9dc183;
       color: white;
       border-radius: 3px;
       margin-top: 5px;
@@ -53,6 +63,7 @@
 	  gap: 8px;            /* Adds space between checkbox and icon */
 	  margin-bottom: 6px;  /* Increases vertical spacing between rows */
 	  line-height: 1;    /* Adjusts line height for better readability */
+	  font-size: 0.9rem;
 	}
 
 	
@@ -85,29 +96,28 @@
 
 
 
+
   /* Section for Student Lounges */
 	.lounges-section {
-		width: 80%;
-		margin-top: 30px;
-		text-align: center;
+	  width: 100%;
+	  max-width: 1200px;
+	  margin: 30px auto 0 auto;
+	  text-align: center;
 	}
 
 	.lounges-title {
-		font-size: 24px;
-		font-weight: bold;
-		margin-bottom: 15px;
-		margin-left: 300px;
-		text-align: center;
+	  font-size: 24px;
+	  font-weight: bold;
+	  margin-bottom: 15px;
 	}
 
-	/* Grid for Images */
 	.lounges-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 20px;
-		justify-content: center;
-		margin-top: 20px;
-		margin-left: 300px;
+	  display: grid;
+	  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	  gap: 20px;
+	  justify-content: center;
+	  margin-top: 20px;
+	  margin-left: 0; 
 	}
 
 	/* Image Container */
@@ -132,23 +142,59 @@
 		font-weight: bold;
 	}
 
-	/* DESKTOP (tablet + bigger) */
-	@media (min-width: 768px) {
-	  .map-container {
-		flex-direction: row; /* Desktop: side-by-side */
-	  }
 
+
+	@media (max-width: 768px) {
 	  .controls {
-		width: 300px;
-		margin-right: 10px;
-		height: auto;
+		width: 90%;
+		left: 5%;
+		top: 10px;
+		font-size: 14px;
+		padding: 8px;
 	  }
 
-	  #map {
-		height: calc(100vh - 20px); /* Make map taller on desktop */
-		flex: 1;
+	  .lounges-title {
+		font-size: 20px;
+		padding: 0 10px;
+	  }
+
+	  .lounge-caption {
+		font-size: 14px;
+	  }
+
+	  .lounge-item {
+		padding: 8px;
+	  }
+
+	  .lounges-section {
+		padding: 0 10px;
+	  }
+
+	  .leaflet-container {
+		height: 50vh;
 	  }
 	}
+
+	@media (max-width: 480px) {
+	  .controls {
+		font-size: 12px;
+		padding: 6px;
+	  }
+
+	  .lounges-title {
+		font-size: 18px;
+	  }
+
+	  .lounge-caption {
+		font-size: 13px;
+	  }
+
+	  .leaflet-container {
+		height: 45vh;
+	  }
+	}
+
+
 
 	
   </style>
@@ -156,9 +202,6 @@
   
 </head>
 <body>
-
-<div class="map-container">
-
   <div id="map"></div>
 
 <div class="controls">  
@@ -242,36 +285,22 @@
         <i class="fas fa-landmark"></i>
       </span> &nbsp;Museum
     </label>
-    <label>
-      <input type="checkbox" onclick="toggleLayer(AparaaditehasCulturalCenterLayer)">
-      <span style="background-color: darkmagenta; color: white; border-radius: 2px; padding: 3px 3px;">
-        <i class="fas fa-people-group"></i>
-      </span> &nbsp;Aparaaditehas Cultural Center
-    </label>
-    <label>
-      <input type="checkbox" onclick="toggleLayer(nationalArchiveLayer)">
-      <span style="background-color: cadetblue; color: white; border-radius: 2px; padding: 3px 3px;">
-        <i class="fas fa-archive"></i>
-      </span> &nbsp;National Archives of Estonia
-    </label>
+
+
     <label>
       <input type="checkbox" onclick="toggleLayer(apolloCinemaLayer)">
-      <span style="background-color: cadetblue; color: white; border-radius: 2px; padding: 3px 3px;">
+      <span style="background-color: green; color: white; border-radius: 2px; padding: 3px 3px;">
         <i class="fas fa-film"></i>
       </span> &nbsp;Apollo Cinema
     </label>
 
-    <label>
-      <input type="checkbox" onclick="toggleLayer(tartuElektriteaterLayer)">
-      <span style="background-color: cadetblue; color: white; border-radius: 2px; padding: 3px 3px;">
-        <i class="fas fa-masks-theater"></i>
-      </span> &nbsp;Tartu Elektriteater
-    </label>
+
+ 
 	
 	
     <label>
       <input type="checkbox" onclick="toggleLayer(pallasGalleryLayer)">
-      <span style="background-color: cadetblue; color: white; border-radius: 2px; padding: 3px 3px;">
+      <span style="background-color: orange; color: white; border-radius: 2px; padding: 3px 3px;">
         <i class="fas fa-studiovinari"></i>
       </span> &nbsp;Pallas Gallery
     </label>
@@ -279,10 +308,32 @@
 	
     <label>
       <input type="checkbox" onclick="toggleLayer(artUnionLayer)">
-      <span style="background-color: cadetblue; color: white; border-radius: 2px; padding: 3px 3px;">
+      <span style="background-color: red; color: white; border-radius: 2px; padding: 3px 3px;">
         <i class="fas fa-palette"></i>
       </span> &nbsp;Tartu Art Union
     </label>
+	
+	
+   <label>
+      <input type="checkbox" onclick="toggleLayer(AparaaditehasCulturalCenterLayer)">
+      <span style="background-color: darkmagenta; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-people-group"></i>
+      </span> &nbsp;Aparaaditehas Cultural Center
+    </label>
+	
+    <label>
+      <input type="checkbox" onclick="toggleLayer(nationalArchiveLayer)">
+      <span style="background-color: cadetblue; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-archive"></i>
+      </span> &nbsp;National Archives of Estonia
+    </label>	
+	
+    <label>
+      <input type="checkbox" onclick="toggleLayer(tartuElektriteaterLayer)">
+      <span style="background-color: blue; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-masks-theater"></i>
+      </span> &nbsp;Tartu Elektriteater
+    </label>	
 
 	
   </div>
@@ -308,14 +359,14 @@
     </label>
     <label>
       <input type="checkbox" onclick="toggleLayer(utCounsellingCentreLayer)">
-      <span style="background-color: lightblue; color: white; border-radius: 2px; padding: 3px 3px;">
+      <span style="background-color: green; color: white; border-radius: 2px; padding: 3px 3px;">
         <i class="fas fa-circle-info"></i>
       </span> &nbsp;UT Counselling Center
     </label>
 	
     <label>
       <input type="checkbox" onclick="toggleLayer(EMO_GeoJSONLayer)">
-      <span style="background-color: lightblue; color: white; border-radius: 2px; padding: 3px 3px;">
+      <span style="background-color: purple; color: white; border-radius: 2px; padding: 3px 3px;">
         <i class="fas fa-truck-medical"></i>
       </span> &nbsp;Emergency Care/EMO
     </label>	
@@ -327,9 +378,9 @@
 	
     <label>
       <input type="checkbox" onclick="toggleLayer(emergence_dentalLayer)">
-      <span style="background-color: lightblue; color: white; border-radius: 2px; padding: 3px 3px;">
+      <span style="background-color: blue; color: white; border-radius: 2px; padding: 3px 3px;">
         <i class="fas fa-tooth"></i>
-      </span> &nbsp;Emergence Dental Care
+      </span> &nbsp;Emergence Dental Service
     </label>	
 	
 	
@@ -339,10 +390,10 @@
 	
   </div>
 
-  <button onclick="resetView()">Default</button>
+  <button onclick="resetView()" style="margin-top: 10px;">Default</button>
 </div>
 
-</div>
+
   
   
   
@@ -369,6 +420,27 @@
                 <img src="https://i.postimg.cc/tJQhrSFQ/Iuridicum-Building-Study-Area.jpg" alt="Lounge 3">
                 <p class="lounge-caption">Iuridicum Building</p>
             </div>
+			
+			
+													            <div class="lounge-item">
+                <img src="https://i.postimg.cc/3JLkNfW8/phamasy-Nooruse-1-Study-Building-kitch.jpg" alt="Lounge 9">
+                <p class="lounge-caption">Nooruse 1 Study Building</p>
+            </div>	
+
+
+													            <div class="lounge-item">
+                <img src="https://i.postimg.cc/yNGK06YQ/phycology-Kitchen.jpg" alt="Lounge 11">
+                <p class="lounge-caption">Näituse 2 Study Building</p>
+            </div>	
+
+
+
+													            <div class="lounge-item">
+                <img src="https://i.postimg.cc/Hs1pSL0F/Omicum-Study-Area.jpg" alt="Lounge 13">
+                <p class="lounge-caption">Omicum Building</p>
+            </div>	
+			
+			
 
             <div class="lounge-item">
                 <img src="https://i.postimg.cc/G3GPBR1c/likooli-tn-17-student-lounge.jpg" alt="Lounge 4">
@@ -401,10 +473,7 @@
             </div>	
 			
 			
-										            <div class="lounge-item">
-                <img src="https://i.postimg.cc/3JLkNfW8/phamasy-Nooruse-1-Study-Building-kitch.jpg" alt="Lounge 9">
-                <p class="lounge-caption">Nooruse 1 Study Building</p>
-            </div>	
+
 			
 			
 													            <div class="lounge-item">
@@ -412,6 +481,28 @@
                 <p class="lounge-caption">Biomedicum Building</p>
             </div>	
 			
+
+
+
+			
+			
+			
+																            <div class="lounge-item">
+                <img src="https://i.postimg.cc/9QVQffry/delta.jpg" alt="Lounge 12">
+                <p class="lounge-caption">Delta Building</p>
+            </div>	
+			
+			
+
+
+			
+																            <div class="lounge-item">
+                <img src="https://i.postimg.cc/Qxgjvr0C/ut-Library.jpg" alt="Lounge 14">
+                <p class="lounge-caption">UT Library</p>
+            </div>	
+						
+
+
 			
 			
         </div>
@@ -422,7 +513,7 @@
 
 
   <script>
-    var map = new L.Map('map').setView([58.380628, 26.725248], 16);
+    var map = new L.Map('map').setView([58.380628, 26.725248], 13);
     L.tileLayer('https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
       maxZoom: 18,
@@ -448,13 +539,38 @@
 				<div class="legend-color student-residences"></div>
 				<span>Student Residences</span>
 			</div>
+
+			<div class="legend-item">
+				<i class="fa fa-shield-halved" style="color: white; background: darkblue; width: 24px; height: 24px; 
+					border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px;"></i>
+				<span style="margin-left: 5px;">  Politsei- ja Piirivalveamet</span>
+			</div>
+
+			<div class="legend-item">
+				<i class="fa fa-door-open" style="color: white; background: red; width: 24px; height: 24px; 
+					border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px;"></i>
+				<span style="margin-left: 5px;">  Tartu Welcome Centre</span>
+			</div>
+			
+			<div class="legend-item">
+				<i class="fa fa-camera" style="color: white; background: purple; width: 24px; height: 24px; 
+					border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px;"></i>
+				<span style="margin-left: 5px;">  Tartu Information Centre</span>
+			</div>			
+			
+			
+
 			<div class="legend-item">
 				<div class="legend-color park"></div>
 				<span>Park</span>
 			</div>
+
+
+
 		`;
 		return div;
 	};
+
 
 
 	// Add legend to the map
@@ -494,7 +610,9 @@
 		let allLayers = [
 		  utGymLayer, outDoorGymLayer, sportParkLayer, utLibraryLayer, libraryLayer, utStudyAreasLayer,
 		  microwavesLayer, RüütliStreetLayer, foodSharingLayer, museumLayer, utMuseumLayer,
-		  AparaaditehasCulturalCenterLayer, nationalArchiveLayer, hospitalLayer, privateCounsellingLayer
+		  AparaaditehasCulturalCenterLayer, nationalArchiveLayer, hospitalLayer, privateCounsellingLayer, 
+		  EMO_GeoJSONLayer, emergence_dentalLayer, artUnionLayer, pallasGalleryLayer, tartuElektriteaterLayer,
+		  apolloCinemaLayer, utCounsellingCentreLayer
 		];
 
 		allLayers.forEach(layer => {
@@ -504,7 +622,7 @@
 		});
 
 		// Reset map view
-		map.setView([58.380628, 26.725248], 16);
+		map.setView([58.380628, 26.725248], 13);
 	  }
 	 
 
@@ -550,8 +668,17 @@
 
 
 
+	var json_policeStation_GeoJSON = {"type":"FeatureCollection","name":"policeStation","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"1","id":"1","Name":"Politsei- ja Piirivalveamet", "Address":"Riia tn 132"},"geometry":{"type":"Point","coordinates":[26.687800967360182,58.359599949486153]}}]};
 
 
+
+	var json_tartuWelcomeCentre_GeoJSON = {"type":"FeatureCollection","name":"tartuWelcomeCentre_0","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"2","id":"2","Name":"Tartu Welcome Centre", "Address":"Ülikooli tn 17"},"geometry":{"type":"Point","coordinates":[26.720760262251979,58.381324907733401]}}]};
+
+
+	var json_Information__Tartu_GeoJSON = {"type":"FeatureCollection","name":"tartuWelcomeCentre_0","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"2","id":"2","Name":"Tartu Information Centre", "Address":"Raekoja plats 1a, Town Hall"},"geometry":{"type":"Point","coordinates":[26.722157651022336, 58.38022124038451]}}]};
 
 
 
@@ -654,6 +781,50 @@
 	
 	
 	
+	
+	const policeStationLayer = L.geoJson(json_policeStation_GeoJSON, { 
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {
+				icon: L.AwesomeMarkers.icon({
+					icon: 'shield-halved',  // FontAwesome police shield icon
+					markerColor: 'darkblue', // Dark blue marker for police
+					prefix: 'fa',
+					iconColor: 'white'
+				})
+			}).bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address || 'No address available'}`);
+		}
+	});  
+	policeStationLayer.addTo(map);  
+
+
+	const tartuWelcomeCentreLayer = L.geoJson(json_tartuWelcomeCentre_GeoJSON, { 
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {
+				icon: L.AwesomeMarkers.icon({
+					icon: 'door-open',  // FontAwesome info icon
+					markerColor: 'red', // Red marker for welcome centre
+					prefix: 'fa',
+					iconColor: 'white'
+				})
+			}).bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address || 'No address available'}`);
+		}
+	});  
+	tartuWelcomeCentreLayer.addTo(map);
+
+
+	const tartuInformationCentreLayer = L.geoJson(json_Information__Tartu_GeoJSON, { 
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {
+				icon: L.AwesomeMarkers.icon({
+					icon: 'camera',  // FontAwesome info icon
+					markerColor: 'purple', // Red marker for welcome centre
+					prefix: 'fa',
+					iconColor: 'white'
+				})
+			}).bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address || 'No address available'}`);
+		}
+	});  
+	tartuInformationCentreLayer.addTo(map);
 
 
 
@@ -723,6 +894,8 @@
 					{"type":"Feature","properties":{"id":"7","Address":"Jakobi 2", "Name":"Jakobi 2 Study Building Student Breakroom"},"geometry":{"type":"Point","coordinates":[26.719719942316267,58.380500007864292]}},
 					{"type":"Feature","properties":{"id":"8","Address":"Jakobi 5", "Name":"Jakobi 5 Study Building Student Lounge"},"geometry":{"type":"Point","coordinates":[26.718373328821304,58.382095182689277]}},
 					{"type":"Feature","properties":{"id":"10", "Address":"Vanemuise tn 46","Name":"Vanemuise 46 Study Building Student Breakroom"},"geometry":{"type":"Point","coordinates":[26.715708215063685,58.373247552053201]}},
+					{"type":"Feature","properties":{"id":"11", "Address":"Riia tn 23","Name":"Riia 23 Omicum Breakroom"},"geometry":{"type":"Point","coordinates":[26.71781053376524,58.372875118565304]}},
+					{"type":"Feature","properties":{"id":"12", "Address":"Näituse tn 2","Name":"Näituse 2 Study Building Student Breakroom"},"geometry":{"type":"Point","coordinates":[26.711798118556004, 58.379518408619866]}},
 					{"type":"Feature","properties":{"id":"9","Address":"Narva mnt 18","Name":"Delta Center Student Breakroom"},"geometry":{"type":"Point","coordinates":[26.725280579872003,58.385248145011751]}}]}
 
 
@@ -800,7 +973,7 @@
 
 	var json_EMO_GeoJSON = 
 	{"type":"FeatureCollection","name":"EMO","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
-	[{"type":"Feature","properties":{"fid":"2","id":"2","name":"Emergency care unit/Erakorralise meditsiini osakond(EMO)", "Address": "L. Puusepa tn 8, wing M, first floor"},"geometry":{"type":"Point","coordinates":[26.70195601793721, 58.36901859353862]}}]};
+	[{"type":"Feature","properties":{"fid":"2","id":"2","Name":"Emergency care unit/Erakorralise meditsiini osakond(EMO)", "Address": "L. Puusepa tn 8, wing M, first floor"},"geometry":{"type":"Point","coordinates":[26.70195601793721, 58.36901859353862]}}]};
 
 
 	const json_emergence_dentalCare_GeoJSON = 
@@ -959,7 +1132,7 @@
 		var apolloCinemaLayer = L.geoJson(json_apollo_cinema_0_GeoJSON, {
       pointToLayer: function (feature, latlng) {
         var awesomeMarker = L.AwesomeMarkers.icon({
-          icon: 'fa-film', markerColor: 'cadetblue', prefix: 'fa', iconColor: 'white'
+          icon: 'fa-film', markerColor: 'green', prefix: 'fa', iconColor: 'white'
         });
         return L.marker(latlng, { icon: awesomeMarker })
           .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
@@ -972,7 +1145,7 @@
 		var tartuElektriteaterLayer = L.geoJson(json_Tartu_Elektriteater_GeoJSON, {
       pointToLayer: function (feature, latlng) {
         var awesomeMarker = L.AwesomeMarkers.icon({
-          icon: 'fa-masks-theater', markerColor: 'cadetblue', prefix: 'fa', iconColor: 'white'
+          icon: 'fa-masks-theater', markerColor: 'blue', prefix: 'fa', iconColor: 'white'
         });
         return L.marker(latlng, { icon: awesomeMarker })
           .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
@@ -983,7 +1156,7 @@
 		var pallasGalleryLayer = L.geoJson(json_Pallas_Gallery_Exhibitions_GeoJSON, {
       pointToLayer: function (feature, latlng) {
         var awesomeMarker = L.AwesomeMarkers.icon({
-          icon: 'fa-studiovinari', markerColor: 'cadetblue', prefix: 'fa', iconColor: 'white'
+          icon: 'fa-studiovinari', markerColor: 'orange', prefix: 'fa', iconColor: 'white'
         });
         return L.marker(latlng, { icon: awesomeMarker })
           .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
@@ -996,7 +1169,7 @@
 		var artUnionLayer = L.geoJson(json_Kunstmaja_GeoJSON, {
       pointToLayer: function (feature, latlng) {
         var awesomeMarker = L.AwesomeMarkers.icon({
-          icon: 'fa-palette', markerColor: 'cadetblue', prefix: 'fa', iconColor: 'white'
+          icon: 'fa-palette', markerColor: 'red', prefix: 'fa', iconColor: 'white'
         });
         return L.marker(latlng, { icon: awesomeMarker })
           .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
@@ -1009,7 +1182,7 @@
 		var utCounsellingCentreLayer = L.geoJson(json_ut_counselling_centerut_counselling_0, {
 		  pointToLayer: function (feature, latlng) {
 			var awesomeMarker = L.AwesomeMarkers.icon({
-			  icon: 'circle-info', markerColor: 'lightblue', prefix: 'fa', iconColor: 'white'
+			  icon: 'circle-info', markerColor: 'green', prefix: 'fa', iconColor: 'white'
 			});
 
 			return L.marker(latlng, { icon: awesomeMarker })
@@ -1046,7 +1219,7 @@
 	    var EMO_GeoJSONLayer = L.geoJson(json_EMO_GeoJSON, {
 	  pointToLayer: function (feature, latlng) {
 		var awesomeMarker = L.AwesomeMarkers.icon({
-		  icon: 'truck-medical', markerColor: 'orange', prefix: 'fa', iconColor: 'white'
+		  icon: 'truck-medical', markerColor: 'purple', prefix: 'fa', iconColor: 'white'
 		});
 		return L.marker(latlng, { icon: awesomeMarker })
 		  .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
@@ -1059,7 +1232,7 @@
 	    var emergence_dentalLayer = L.geoJson(json_emergence_dentalCare_GeoJSON, {
 	  pointToLayer: function (feature, latlng) {
 		var awesomeMarker = L.AwesomeMarkers.icon({
-		  icon: 'tooth', markerColor: 'orange', prefix: 'fa', iconColor: 'white'
+		  icon: 'tooth', markerColor: 'blue', prefix: 'fa', iconColor: 'white'
 		});
 		return L.marker(latlng, { icon: awesomeMarker })
 		  .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
@@ -1088,4 +1261,3 @@
   </script>
 </body>
 </html>
-
