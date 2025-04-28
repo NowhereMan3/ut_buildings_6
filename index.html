@@ -133,7 +133,7 @@
 	  font-size: 24px;
 	  font-weight: bold;
 	  margin-bottom: 15px;
-		text-align: center; 
+	  text-align: center; 
 	}
 
 	.lounges-grid {
@@ -187,11 +187,10 @@
 <body>
 
 <div id="app">
-  <div id="map"></div>
- 
+
 
 <div class="controls">  
-  <div class="parent-header" onclick="toggleSection('exciseLayers')">Exercise +</div>
+  <div class="parent-header" onclick="toggleSection('exciseLayers')">Exercise</div>
   <div id="exciseLayers" class="child-layers">
     <label>
       <input type="checkbox" onclick="toggleLayer(utGymLayer)">
@@ -213,7 +212,7 @@
     </label>
   </div>
 
-  <div class="parent-header" onclick="toggleSection('studyLayers')">Study Areas +</div>
+  <div class="parent-header" onclick="toggleSection('studyLayers')">Study Areas</div>
   <div id="studyLayers" class="child-layers">
     <label>
       <input type="checkbox" onclick="toggleLayer(utLibraryLayer)">
@@ -235,7 +234,7 @@
     </label>
   </div>
 
-  <div class="parent-header" onclick="toggleSection('eatingLayers')">Eating Areas +</div>
+  <div class="parent-header" onclick="toggleSection('eatingLayers')">Eating Areas</div>
   <div id="eatingLayers" class="child-layers">
     <label>
       <input type="checkbox" onclick="toggleLayer(microwavesLayer)">
@@ -329,7 +328,7 @@
   
   
 
-  <div class="parent-header" onclick="toggleSection('mentalHealthLayers')">Health +</div>
+  <div class="parent-header" onclick="toggleSection('mentalHealthLayers')">Health</div>
   <div id="mentalHealthLayers" class="child-layers">
     <label>
       <input type="checkbox" onclick="toggleLayer(hospitalLayer)">
@@ -380,7 +379,8 @@
 </div>
 
   
-  
+  <div id="map"></div>
+   
   
 
   
@@ -620,7 +620,7 @@
 		});
 
 		// Reset map view
-		map.setView([58.380628, 26.725248], 12);
+		map.setView([58.380628, 26.725248], 13);
 	  }
 	 
 
